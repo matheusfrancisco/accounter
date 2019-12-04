@@ -1,0 +1,24 @@
+{
+  "name": "mentoria",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "@types/chai": "^4.2.6",
+    "@types/express": "^4.17.2",
+    "@types/mocha": "^5.2.7",
+    "chai": "^4.2.0",
+    "express": "^4.17.1",
+    "mocha": "^6.2.2",
+    "ts-node": "^8.5.4",
+    "tsc": "^1.20150623.0",
+    "typescript": "^3.7.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "ts-node index.ts",
+    "test": "mocha -r ts-node/register test/\\*\\*/\\*.test.ts"
+  },
+  "author": "",
+  "license": "ISC"
+}
