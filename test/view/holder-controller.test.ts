@@ -1,20 +1,26 @@
 import chai from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
-
+import chaiAsPromised from 'chai-as-promised';
+ 
+chai.use(chaiAsPromised);
 chai.use(sinonChai);
 const expect = chai.expect;
-import { buildHolderController } from '../../src/view/holder-controller';
+import { buildHolderController, ServiceError } from '../../src/view/holder-controller';
+import { promises } from 'fs';
 
 describe('HolderController', () => {
     let createHolder: sinon.SinonSpy;
-    let holderServiceMock: { createHolder: sinon.SinonSpy };
+    let createHolderMock: (name: string, taxpayerRegistry: string) => Promise<void>;
+    let holderServiceMock: { createHolder: (name: string, taxpayerRegistry: string) => Promise<void> };
     let holderController: any;
     let failingHolderController: any;
+    let failingForUnknownReasonsHolderController: any;
     let end: any;
-    let endMock: any;
+    let statusReturnMock: any;
     let status: any;
     let resMock: any;
+    let json: any;
     
     const holderName = 'Matheus';
     const holderTaxpayerRegistry = '30330322210';
@@ -22,46 +28,54 @@ describe('HolderController', () => {
     const reqWithoutName = {body: { taxpayerRegistry: holderTaxpayerRegistry}};
     const reqWithoutTaxpayerRegistry = {body: { name: holderName }};
     
-    //TODO 
-    // Todos os postHolder com await antes.
-    // O createHolder vai ter que retornar uma Promise<sinon> (sinon spy promise)
     beforeEach(() => {
         createHolder = sinon.spy();
-        holderServiceMock = { createHolder };
+        createHolderMock = (name: string, taxpayerRegistry: string) => { 
+            return Promise.resolve(createHolder(name, taxpayerRegistry)); 
+        };
+        holderServiceMock = { createHolder: createHolderMock };
         holderController = buildHolderController(holderServiceMock);
-        failingHolderController = buildHolderController({ createHolder: () => { throw new Error(); }});
+        failingHolderController = buildHolderController({ createHolder: () => { throw new ServiceError('Service error'); }});
+        failingForUnknownReasonsHolderController = buildHolderController({ createHolder: () => { throw new Error('Unknown error'); }});
         end = sinon.spy();
-        endMock = { end };
-        status = sinon.spy(() => endMock);
+        json = sinon.spy();
+        statusReturnMock = { end, json };
+        status = sinon.spy(() => statusReturnMock);
         resMock = { status };
     });
     
-    it('Should receive name and taxpayeresgiter and delegate to application layer', () => {
-        holderController.postHolder(req, resMock);
+    it('Should receive name and taxpayeresgiter and delegate to application layer', async () => {
+        await holderController.postHolder(req, resMock);
         expect(createHolder).to.have.been.calledWith(holderName, holderTaxpayerRegistry);
     });
 
-    it('Should return status code 201', () => {
-        holderController.postHolder(req, resMock);
+    it('Should return status code 201', async () => {
+        await holderController.postHolder(req, resMock);
         expect(status).to.have.been.calledWith(201);
         expect(end).to.have.been.called;
     }); 
 
-    it('Should return status code 400 if name is not present', () => {
-        holderController.postHolder(reqWithoutName, resMock);
+    it('Should return status code 400 if name is not present', async () => {
+        await holderController.postHolder(reqWithoutName, resMock);
         expect(status).to.have.been.calledWith(400);
-        expect(end).to.have.been.called;
+        expect(json).to.have.been.calledWith({ error: 'Parameters missing' });
     });
 
-    it('Should return status code 400 if taxpayerregistry is not present', () => {
-        holderController.postHolder(reqWithoutTaxpayerRegistry, resMock);
+    it('Should return status code 400 if taxpayerregistry is not present', async () => {
+        await holderController.postHolder(reqWithoutTaxpayerRegistry, resMock);
         expect(status).to.have.been.calledWith(400);
-        expect(end).to.have.been.called;
+        expect(json).to.have.been.calledWith({ error: 'Parameters missing' });
     });
 
-    it('Should return status code 400 if error thrown', () => {
-        failingHolderController.postHolder(req, resMock);
+    it('Should return status code 400 if error thrown', async () => {
+        await failingHolderController.postHolder(req, resMock);
         expect(status).to.have.been.calledWith(400);
-        expect(end).to.have.been.called;
+        expect(json).to.have.been.calledWith({ error: 'Service error' });
+    });
+
+    it('Should throw if error is unknown', () => {
+        expect(failingForUnknownReasonsHolderController.postHolder(req, resMock))
+            .to.eventually.throw;
+        expect(status).to.not.have.been.called;
     });
 })
