@@ -1,18 +1,15 @@
 import { ParamsDictionary } from "express-serve-static-core";
-
-interface HolderService {
-    createHolder: (name: string, taxpayerRegistry: string) => Promise<void>;
-}
+import HolderService from "../application/holder-service";
 
 class ServiceError extends Error {};
 
 const buildErrorMessage = (message: string) => ({ error: message });
-const reply404 = (res: any, message: string) =>  res.status(400).json(buildErrorMessage(message));
+const reply400 = (res: any, message: string) =>  res.status(400).json(buildErrorMessage(message));
 
 const buildHolderController = (holderService: HolderService) => ({
-    postHolder: async (req: any, res: any) => {
+    post: async (req: any, res: any) => {
         if (!req.body.name || !req.body.taxpayerRegistry) {
-            reply404(res, 'Parameters missing');
+            reply400(res, 'Parameters missing');
             return;
         }
         try {
@@ -20,7 +17,7 @@ const buildHolderController = (holderService: HolderService) => ({
             res.status(201).end();
         } catch (error) {
             if (error.constructor.name === 'ServiceError') {
-                reply404(res, error.message);
+                reply400(res, error.message);
             } else {
                 throw error;
             }
