@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "scripts": {
+    "start": "ts-node index.ts",
+    "test": "jest --forceExit --silent --maxWorkers=1"
+  },
   "dependencies": {
     "@types/chai": "^4.2.6",
     "@types/chai-as-promised": "^7.1.2",
@@ -26,9 +30,29 @@
     "ts-jest": "^24.3.0",
     "typescript": "^3.7.5"
   },
-  "scripts": {
-    "start": "ts-node index.ts",
-    "test": "mocha -r ts-node/register test/\\*\\*/\\*.test.ts"
+  "jest": {
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testRegex": "(/test/.*|(\\.|/)(test|spec))\\.test.ts?$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ],
+    "globals": {
+      "ts-jest": {
+        "diagnostics": false
+      }
+    },
+    "collectCoverage": true,
+    "coverageReporters": [
+      "text"
+    ],
+    "testEnvironment": "node"
   },
   "author": "",
   "license": "ISC"
