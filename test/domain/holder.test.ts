@@ -1,8 +1,9 @@
 import Holder from '../../src/domain/holder';
+import TaxpayerRegistry from '../../src/domain/taxpayer-registry';
 
 describe('Holder', () => {
     const expectedName = 'Marina';
-    const expectedTaxpayerRegistry = '56282681006';
+    const expectedTaxpayerRegistry = new TaxpayerRegistry('56282681006');
     const holder = new Holder(expectedName, expectedTaxpayerRegistry);
 
     it('has a name', () => {
@@ -11,16 +12,5 @@ describe('Holder', () => {
 
     it('has a taxpayerRegistry', () => {
         expect(holder.taxpayerRegistry).toEqual(expectedTaxpayerRegistry);    
-    });
-
-    it('throws when taxpayerRegistry is invalid', () => {
-        try {
-            new Holder('X', 'zueira')
-        } catch {
-            expect(true).toBeTruthy;
-            return;
-        }
-        expect(true).toBeFalsy;
-        //expect(() => new Holder('X', 'zueira')).toThrowError('invalid taxpayerRegistry');
     });
 });
