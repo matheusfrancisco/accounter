@@ -31,28 +31,13 @@
     "typescript": "^3.7.5"
   },
   "jest": {
-    "transform": {
-      "^.+\\.tsx?$": "ts-jest"
-    },
-    "testRegex": "(/test/.*|(\\.|/)(test|spec))\\.test.ts?$",
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "jsx",
-      "json",
-      "node"
-    ],
+    "preset": "ts-jest",
+    "testEnvironment": "node",
     "globals": {
       "ts-jest": {
         "diagnostics": false
       }
-    },
-    "collectCoverage": true,
-    "coverageReporters": [
-      "text"
-    ],
-    "testEnvironment": "node"
+    }
   },
   "author": "",
   "license": "ISC"
