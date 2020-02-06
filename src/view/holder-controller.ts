@@ -13,7 +13,7 @@ const buildHolderController = (holderService: HolderService) => ({
             return;
         }
         try {
-            await holderService.createHolder(req.body.name, req.body.taxpayerRegistry);            
+            await holderService.createHolder(req.body.name, req.body.taxpayerRegistry, req.body.countryCode);            
             res.status(201).end();
         } catch (error) {
             if (error.constructor.name === 'ServiceError') {

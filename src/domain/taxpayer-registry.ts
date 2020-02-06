@@ -1,8 +1,10 @@
+export type CountryCode = 'US' | 'BR';
+
 export default class TaxpayerRegistry {
-    constructor(readonly value: string) {
-        this.validateTaxpayerRegistry(value);
+    constructor(readonly value: string, readonly countryCode: CountryCode) {
+        this.validateTaxpayerRegistry(value, countryCode);
     }
-    validateTaxpayerRegistry(taxpayerRegistry: string) {
+    validateTaxpayerRegistry(taxpayerRegistry: string, countryCode: CountryCode) {
         function cpf(cpf: any) {
             cpf = cpf.replace(/\D/g, '');
             if (cpf.toString().length != 11 || /^(\d)\1{10}$/.test(cpf))
@@ -20,7 +22,17 @@ export default class TaxpayerRegistry {
             });
             return result;
         }
-        if (!cpf(taxpayerRegistry))
-            throw new Error('invalid taxpayerRegistry');
+
+        function validateSSN (elementValue: string){
+            var  ssnPattern = /^[0-9]{3}\-?[0-9]{2}\-?[0-9]{4}$/;
+            return ssnPattern.test(elementValue);
+        }
+        if(countryCode === 'BR') {
+            if (!cpf(taxpayerRegistry))
+               throw new Error('invalid taxpayerRegistry');
+        } else {
+            if (!validateSSN(taxpayerRegistry))
+               throw new Error('invalid taxpayerRegistry');
+        }
     }
 }
