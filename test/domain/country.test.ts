@@ -1,4 +1,4 @@
-import { countries } from '../../src/domain/country';
+import { countries, CountryFactory, CountryCode } from '../../src/domain/country';
 
 describe('Country', () => {
     describe('Brazil', () => {
@@ -9,7 +9,7 @@ describe('Country', () => {
         it('should throw for invalid CPF', () => {
             expect(() => countries.BR.validateTaxpayerRegistry('zueira')).toThrow();
         });
-    })
+    });
 
     describe('United States', () => {
         it('should validate Taxpayer Registry value', () => {
@@ -19,5 +19,12 @@ describe('Country', () => {
         it('should throw for invalid CPF', () => {
             expect(() => countries.US.validateTaxpayerRegistry('zueira')).toThrow();
         });
-    })
+    });
+});
+
+describe('County Factory', () => {
+    it('should throw for unknown country', () => {
+        expect(() => new CountryFactory().buildCountry('UNKNOWN_COUNTRY' as CountryCode))
+            .toThrowError();
+    });
 });

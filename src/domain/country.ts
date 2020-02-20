@@ -51,6 +51,10 @@ export const countries = {
 
 export class CountryFactory {
     buildCountry(countryCode: CountryCode) {
-        return countries[countryCode];
+        const country = countries[countryCode];
+        if(!country) {
+            throw new Error();
+        }
+        return country;
     }
 }

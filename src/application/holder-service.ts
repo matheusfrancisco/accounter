@@ -15,7 +15,6 @@ export default class HolderService {
 
     async createHolder(name: string, taxpayerRegistry: string, countryCode: string) {
         const country = this.countryFactory.buildCountry(countryCode as CountryCode);
-        if(!country) throw new Error();
         this.holderRepository.save(new Holder(
             name, 
             new TaxpayerRegistry(
