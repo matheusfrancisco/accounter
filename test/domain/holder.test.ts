@@ -3,7 +3,7 @@ import TaxpayerRegistry from '../../src/domain/taxpayer-registry';
 
 describe('Holder', () => {
     const expectedName = 'Marina';
-    const expectedTaxpayerRegistry = new TaxpayerRegistry('56282681006');
+    const expectedTaxpayerRegistry = new TaxpayerRegistry('56282681006', { countryCode: 'BR', validateTaxpayerRegistry: () => true });
     const holder = new Holder(expectedName, expectedTaxpayerRegistry);
 
     it('has a name', () => {

@@ -1,21 +1,18 @@
-import chai from 'chai';
 import sinon from 'sinon';
-import sinonChai from 'sinon-chai';
-import chaiAsPromised from 'chai-as-promised';
 import HolderService from '../../src/application/holder-service';
 import Holder from "../../src/domain/holder";
-
-chai.use(chaiAsPromised);
-chai.use(sinonChai);
-const expect = chai.expect;
+import { countries, CountryFactory } from '../../src/domain/country';
 
 describe("HolderService", () => {
     it("should save Holder with HolderRespository", () => {
         const save = sinon.spy();
-        const holderService = new HolderService({ save });
-        holderService.createHolder('Matheus', '56282681006');
-        expect(save).to.have.been.called;
-        expect(save.args[0][0] instanceof Holder).to.be.true;
-    });
-
+        const buildCountry = sinon.fake.returns(countries.US);
+        const countryFactory = { buildCountry };
+        const holderService = new HolderService({ save }, countryFactory);
+        holderService.createHolder('Matheus', '222-22-2222', 'US');
+        expect(buildCountry.called).toBeTruthy();
+        expect(save.called).toBeTruthy();
+        expect(save.args[0][0] instanceof Holder).toBeTruthy();
+        expect(save.args[0][0].taxpayerRegistry.country.countryCode).toEqual('US');
+   });
 });

@@ -25,7 +25,8 @@ describe('HolderController', () => {
 
     const holderName = 'Matheus';
     const holderTaxpayerRegistry = '30330322210';
-    const req = { body: { name: holderName, taxpayerRegistry: holderTaxpayerRegistry } };
+    const holderCountryCode = 'BR';
+    const req = { body: { name: holderName, taxpayerRegistry: holderTaxpayerRegistry, countryCode: holderCountryCode } };
     const reqWithoutName = { body: { taxpayerRegistry: holderTaxpayerRegistry } };
     const reqWithoutTaxpayerRegistry = { body: { name: holderName } };
     const holderRepository = { save: () => Promise.resolve() };
@@ -52,9 +53,9 @@ describe('HolderController', () => {
         resMock = { status };
     });
 
-    it('Should receive name and taxpayeresgiter and delegate to application layer', async () => {
+    it('Should receive name and taxpayerRegistry and country code and delegate to application layer', async () => {
         await holderController.post(req, resMock);
-        expect(createHolder).to.have.been.calledWith(holderName, holderTaxpayerRegistry);
+        expect(createHolder).to.have.been.calledWith(holderName, holderTaxpayerRegistry, holderCountryCode);
     });
 
     it('Should return status code 201', async () => {
