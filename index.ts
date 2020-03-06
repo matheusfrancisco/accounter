@@ -1,4 +1,5 @@
 import express from "express";
+import "reflect-metadata";
 import { buildHolderController } from "./src/view/holder-controller";
 
 const server = express();
