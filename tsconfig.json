@@ -10,17 +10,11 @@
     "outDir": "build",
     "baseUrl": "src",
     "paths": {
-      "*": [
-        "node_modules/*"
-      ],
-      "src/*": [
-        "./*"
-      ]
+      "*": ["node_modules/*"],
+      "src/*": ["./*"]
     },
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true
   },
-  "include": [
-    "src/**/*"
-  ]
+  "include": ["src/**/*"]
 }
