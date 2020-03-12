@@ -1,5 +1,5 @@
-import TaxpayerRegistry from '../../src/domain/taxpayer-registry';
-import {countries} from '../../src/domain/country';
+import TaxpayerRegistry from './taxpayer-registry';
+import {countries} from './country';
 
 describe('TaxpayerRegistry', () => {
   it('should hold Taxpayer Registry value', () => {

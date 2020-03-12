@@ -1,5 +1,5 @@
-import Holder from '../../src/domain/holder';
-import TaxpayerRegistry from '../../src/domain/taxpayer-registry';
+import Holder from './holder';
+import TaxpayerRegistry from './taxpayer-registry';
 
 describe('Holder', () => {
   const expectedName = 'Marina';

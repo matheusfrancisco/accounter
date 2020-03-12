@@ -6,9 +6,8 @@ import chaiAsPromised from 'chai-as-promised';
 chai.use(chaiAsPromised);
 chai.use(sinonChai);
 const expect = chai.expect;
-import {buildHolderController, ServiceError} from '../../src/view/holder-controller';
-import {promises} from 'fs';
-import HolderService, {HolderRepository} from '../../src/application/holder-service';
+import {buildHolderController, ServiceError} from './holder-controller';
+import HolderService, {HolderRepository} from '../application/holder-service';
 
 describe('HolderController', () => {
   let createHolder: sinon.SinonSpy;
