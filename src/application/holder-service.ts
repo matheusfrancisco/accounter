@@ -1,10 +1,8 @@
-import Holder from '../domain/holder';
-import TaxpayerRegistry from '../domain/taxpayer-registry';
-import {CountryCode, CountryFactory} from '../domain/country';
+import Holder from "../domain/holder";
+import TaxpayerRegistry from "../domain/taxpayer-registry";
+import { HolderRepository } from "../domain/holder-repository";
+import { CountryCode, CountryFactory } from "../domain/country";
 
-export interface HolderRepository {
-  save: (holder: Holder) => Promise<void>;
-}
 
 export default class HolderService {
   constructor(private holderRepository: HolderRepository, private countryFactory: CountryFactory) {}
