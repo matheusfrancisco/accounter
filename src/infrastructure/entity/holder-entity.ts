@@ -1,20 +1,18 @@
-import {Entity, PrimaryGeneratedColumn, Column} from "typeorm";
+import {Entity, PrimaryGeneratedColumn, Column} from 'typeorm';
 
 @Entity()
 export class HolderEntity {
+  @PrimaryGeneratedColumn()
+  id!: number;
 
-    @PrimaryGeneratedColumn()
-    id!: number;
+  @Column({
+    unique: true,
+  })
+  taxpayerRegistry!: string;
 
-    @Column({
-        unique: true
-    })
-    taxpayerRegistry!: string;
+  @Column()
+  name!: string;
 
-    @Column()
-    name!: string;
-
-    @Column()
-    country!: string;
-
+  @Column()
+  country!: string;
 }
