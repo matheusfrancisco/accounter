@@ -1,5 +1,5 @@
 import Holder from 'src/domain/holder';
-import {HolderRepository} from 'src/domain/holder-repository';
+import { HolderRepository } from 'src/domain/holder-repository';
 
 export class MemoryHolderRepository implements HolderRepository {
   public readonly holders: Holder[] = [];

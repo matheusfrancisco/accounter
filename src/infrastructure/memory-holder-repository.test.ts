@@ -1,8 +1,8 @@
-import {HolderRepository} from '../../src/domain/holder-repository';
+import { HolderRepository } from '../../src/domain/holder-repository';
 import Holder from '../../src/domain/holder';
 import TaxpayerRegistry from '../../src/domain/taxpayer-registry';
-import {countries} from '../../src/domain/country';
-import {MemoryHolderRepository} from './memory-holder-repository';
+import { countries } from '../../src/domain/country';
+import { MemoryHolderRepository } from './memory-holder-repository';
 
 describe('Memory Holder Repository', () => {
   let holderRepository: MemoryHolderRepository;

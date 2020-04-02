@@ -1,9 +1,9 @@
-import {ParamsDictionary} from 'express-serve-static-core';
+import { ParamsDictionary } from 'express-serve-static-core';
 import HolderService from '../application/holder-service';
 
 class ServiceError extends Error {}
 
-const buildErrorMessage = (message: string) => ({error: message});
+const buildErrorMessage = (message: string) => ({ error: message });
 const reply400 = (res: any, message: string) => res.status(400).json(buildErrorMessage(message));
 
 const buildHolderController = (holderService: HolderService) => ({
@@ -29,4 +29,4 @@ const buildHolderController = (holderService: HolderService) => ({
   },
 });
 
-export {buildHolderController, ServiceError};
+export { buildHolderController, ServiceError };

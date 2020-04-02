@@ -1,4 +1,4 @@
-import {countries, CountryFactory, CountryCode} from './country';
+import { countries, CountryFactory, CountryCode } from './country';
 
 describe('Country', () => {
   describe('Brazil', () => {

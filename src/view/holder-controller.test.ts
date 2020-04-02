@@ -6,8 +6,8 @@ import chaiAsPromised from 'chai-as-promised';
 chai.use(chaiAsPromised);
 chai.use(sinonChai);
 const expect = chai.expect;
-import {buildHolderController, ServiceError} from './holder-controller';
-import HolderService, {HolderRepository} from '../application/holder-service';
+import { buildHolderController, ServiceError } from './holder-controller';
+import HolderService, { HolderRepository } from '../application/holder-service';
 
 describe('HolderController', () => {
   let createHolder: sinon.SinonSpy;
@@ -32,9 +32,9 @@ describe('HolderController', () => {
       countryCode: holderCountryCode,
     },
   };
-  const reqWithoutName = {body: {taxpayerRegistry: holderTaxpayerRegistry}};
-  const reqWithoutTaxpayerRegistry = {body: {name: holderName}};
-  const holderRepository = {save: () => Promise.resolve()};
+  const reqWithoutName = { body: { taxpayerRegistry: holderTaxpayerRegistry } };
+  const reqWithoutTaxpayerRegistry = { body: { name: holderName } };
+  const holderRepository = { save: () => Promise.resolve() };
 
   class HolderServiceMock extends HolderService {
     constructor(
@@ -64,9 +64,9 @@ describe('HolderController', () => {
     );
     end = sinon.spy();
     json = sinon.spy();
-    statusReturnMock = {end, json};
+    statusReturnMock = { end, json };
     status = sinon.spy(() => statusReturnMock);
-    resMock = {status};
+    resMock = { status };
   });
 
   it('Should receive name and taxpayerRegistry and country code and delegate to application layer', async () => {
@@ -87,19 +87,19 @@ describe('HolderController', () => {
   it('Should return status code 400 if name is not present', async () => {
     await holderController.post(reqWithoutName, resMock);
     expect(status).to.have.been.calledWith(400);
-    expect(json).to.have.been.calledWith({error: 'Parameters missing'});
+    expect(json).to.have.been.calledWith({ error: 'Parameters missing' });
   });
 
   it('Should return status code 400 if taxpayerregistry is not present', async () => {
     await holderController.post(reqWithoutTaxpayerRegistry, resMock);
     expect(status).to.have.been.calledWith(400);
-    expect(json).to.have.been.calledWith({error: 'Parameters missing'});
+    expect(json).to.have.been.calledWith({ error: 'Parameters missing' });
   });
 
   it('Should return status code 400 if error thrown', async () => {
     await failingHolderController.post(req, resMock);
     expect(status).to.have.been.calledWith(400);
-    expect(json).to.have.been.calledWith({error: 'Service error'});
+    expect(json).to.have.been.calledWith({ error: 'Service error' });
   });
 
   it('Should throw if error is unknown', () => {
