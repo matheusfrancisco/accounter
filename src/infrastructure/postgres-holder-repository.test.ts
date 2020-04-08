@@ -2,12 +2,12 @@ import { HolderRepository } from '../../src/domain/holder-repository';
 import Holder from '../../src/domain/holder';
 import TaxpayerRegistry from '../../src/domain/taxpayer-registry';
 import { countries } from '../../src/domain/country';
-import { getRepository, createConnection } from 'typeorm';
+import { getRepository, createConnection, Repository } from 'typeorm';
 import { HolderEntity } from '../../src/infrastructure/entity/holder-entity';
 import { PostgresHolderRepository } from '../../src/infrastructure/postgres-holder-repository';
 
 describe('Holder Repository', () => {
-  let repository;
+  let repository: Repository<HolderEntity>;
   let connection;
   let holderRepository: HolderRepository;
 

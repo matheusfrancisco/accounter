@@ -1,12 +1,16 @@
 import express from 'express';
 import 'reflect-metadata';
-import { buildHolderController } from './src/view/holder-controller';
+import { FintopFactory } from './src/fintop-factory';
 
-const server = express();
-const holderController = buildHolderController({ createHolder: () => {} });
-server.get('/', (req, res) => {
-  res.send('Hello world');
-});
-server.post('/holders', holderController.post);
+(async () => {
+  const { holderController } = await FintopFactory.build();
+  const server = express();
+  server.use(express.json());
 
-server.listen(3000, () => {});
+  server.get('/', (req, res) => {
+    res.send('Hello world');
+  });
+
+  server.post('/holders', holderController.post);
+  server.listen(3000, () => {});
+})();

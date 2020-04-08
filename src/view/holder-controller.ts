@@ -8,7 +8,7 @@ const reply400 = (res: any, message: string) => res.status(400).json(buildErrorM
 
 const buildHolderController = (holderService: HolderService) => ({
   post: async (req: any, res: any) => {
-    if (!req.body.name || !req.body.taxpayerRegistry) {
+    if (!req.body || !req.body.name || !req.body.taxpayerRegistry || !req.body.countryCode) {
       reply400(res, 'Parameters missing');
       return;
     }

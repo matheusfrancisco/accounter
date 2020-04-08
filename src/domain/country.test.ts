@@ -1,4 +1,5 @@
 import { countries, CountryFactory, CountryCode } from './country';
+import { ServiceError } from './taxpayer-registry';
 
 describe('Country', () => {
   describe('Brazil', () => {
@@ -7,7 +8,9 @@ describe('Country', () => {
     });
 
     it('should throw for invalid CPF', () => {
-      expect(() => countries.BR.validateTaxpayerRegistry('zueira')).toThrow();
+      expect(() => countries.BR.validateTaxpayerRegistry('zueira')).toThrow(
+        new ServiceError('invalid taxpayerRegistry'),
+      );
     });
   });
 
@@ -17,15 +20,17 @@ describe('Country', () => {
     });
 
     it('should throw for invalid CPF', () => {
-      expect(() => countries.US.validateTaxpayerRegistry('zueira')).toThrow();
+      expect(() => countries.US.validateTaxpayerRegistry('zueira')).toThrow(
+        new ServiceError('invalid taxpayerRegistry'),
+      );
     });
   });
 });
 
 describe('County Factory', () => {
   it('should throw for unknown country', () => {
-    expect(() =>
-      new CountryFactory().buildCountry('UNKNOWN_COUNTRY' as CountryCode),
-    ).toThrowError();
+    expect(() => new CountryFactory().buildCountry('UNKNOWN_COUNTRY' as CountryCode)).toThrowError(
+      new ServiceError(''),
+    );
   });
 });

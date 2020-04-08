@@ -1,5 +1,7 @@
 export type CountryCode = 'US' | 'BR';
 
+class ServiceError extends Error {}
+
 export interface Country {
   countryCode: CountryCode;
   validateTaxpayerRegistry: (value: string) => boolean;
@@ -27,7 +29,7 @@ const Brazil: Country = {
       });
       return result;
     }
-    if (!cpf(taxpayerRegistry)) throw new Error('invalid taxpayerRegistry');
+    if (!cpf(taxpayerRegistry)) throw new ServiceError('invalid taxpayerRegistry');
     return true;
   },
 };
@@ -39,7 +41,7 @@ const UnitedStates: Country = {
       var ssnPattern = /^[0-9]{3}\-?[0-9]{2}\-?[0-9]{4}$/;
       return ssnPattern.test(elementValue);
     }
-    if (!validateSSN(SSN)) throw new Error('invalid taxpayerRegistry');
+    if (!validateSSN(SSN)) throw new ServiceError('invalid taxpayerRegistry');
     return true;
   },
 };
@@ -53,7 +55,7 @@ export class CountryFactory {
   buildCountry(countryCode: CountryCode) {
     const country = countries[countryCode];
     if (!country) {
-      throw new Error();
+      throw new ServiceError();
     }
     return country;
   }

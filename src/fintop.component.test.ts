@@ -3,7 +3,7 @@ import { MemoryHolderRepository } from './infrastructure/memory-holder-repositor
 
 describe('fintop', () => {
   it('should register a holder', async () => {
-    const { holderController, holderRepository } = FintopFactory.build();
+    const { holderController, holderRepository } = await FintopFactory.build('test');
     const res = {
       status: () => ({ end: () => {} }),
     };
