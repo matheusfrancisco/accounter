@@ -6,8 +6,9 @@ import chaiAsPromised from 'chai-as-promised';
 chai.use(chaiAsPromised);
 chai.use(sinonChai);
 const expect = chai.expect;
-import { buildHolderController, ServiceError } from './holder-controller';
-import HolderService, { HolderRepository } from '../application/holder-service';
+import { ServiceError } from '../service-error';
+import { buildHolderController } from './holder-controller';
+import HolderService from '../application/holder-service';
 import { CountryFactory } from '../domain/country';
 
 describe('HolderController', () => {
@@ -121,8 +122,8 @@ describe('HolderController', () => {
     expect(json).to.have.been.calledWith({ error: 'Parameters missing' });
   });
 
-  it('Should throw if error is unknown', () => {
-    expect(failingForUnknownReasonsHolderController.post(req, resMock)).to.eventually.throw;
-    expect(status).to.not.have.been.called;
+  it('Shoud return status 500 if exception is unknow', () => {
+    expect(failingForUnknownReasonsHolderController.post(req, resMock)).to.not.eventually.throw;
+    expect(status).to.have.been.calledWith(500);
   });
 });

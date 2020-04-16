@@ -1,6 +1,5 @@
+import { ServiceError } from '../service-error';
 export type CountryCode = 'US' | 'BR';
-
-class ServiceError extends Error {}
 
 export interface Country {
   countryCode: CountryCode;
