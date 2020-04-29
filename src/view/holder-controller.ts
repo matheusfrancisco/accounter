@@ -21,6 +21,13 @@ const buildHolderController = (holderService: HolderService) => ({
       res.status(status).json(buildErrorMessage(error.message));
     }
   },
+  get: async (req: any, res: any) => {
+    try {
+      return holderService.findHolders();
+    } catch (error) {
+      res.status(500).json(buildErrorMessage(error.message));
+    }
+  },
 });
 
 export { buildHolderController, ServiceError };

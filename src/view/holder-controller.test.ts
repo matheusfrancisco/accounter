@@ -10,6 +10,7 @@ import { ServiceError } from '../service-error';
 import { buildHolderController } from './holder-controller';
 import HolderService from '../application/holder-service';
 import { CountryFactory } from '../domain/country';
+import { HolderResource } from '../application/holder-service';
 
 describe('HolderController', () => {
   let createHolder: sinon.SinonSpy;
@@ -27,6 +28,9 @@ describe('HolderController', () => {
   const holderName = 'Matheus';
   const holderTaxpayerRegistry = '30330322210';
   const holderCountryCode = 'BR';
+  const expectedHolders = [
+    { id: 1, name: 'Xico', taxpayerRegistry: '56282681006', countryCode: 'BR' },
+  ];
   const req = {
     body: {
       name: holderName,
@@ -40,15 +44,20 @@ describe('HolderController', () => {
     body: { name: holderName, taxpayerRegistry: holderTaxpayerRegistry },
   };
   const holderRepository = { save: () => Promise.resolve() };
+  const promiseThatThrows = () => {
+    throw new Error('Unknown error');
+  };
 
   class HolderServiceMock extends HolderService {
     constructor(
       holderRepository: HolderRepository,
       countryFactory: CountryFactory,
       createHolder: (name: string, taxpayerRegistry: string) => Promise<void>,
+      findHolders: () => Promise<HolderResource[]>,
     ) {
       super(holderRepository, countryFactory);
       this.createHolder = createHolder;
+      this.findHolders = findHolders;
     }
   }
 
@@ -58,17 +67,27 @@ describe('HolderController', () => {
       return Promise.resolve(createHolder(name, taxpayerRegistry));
     };
     holderController = buildHolderController(
-      new HolderServiceMock(holderRepository, new CountryFactory(), createHolder),
+      new HolderServiceMock(holderRepository, new CountryFactory(), createHolder, () =>
+        Promise.resolve(expectedHolders),
+      ),
     );
     failingHolderController = buildHolderController(
-      new HolderServiceMock(holderRepository, new CountryFactory(), () => {
-        throw new ServiceError('Service error');
-      }),
+      new HolderServiceMock(
+        holderRepository,
+        new CountryFactory(),
+        () => {
+          throw new ServiceError('Service error');
+        },
+        () => Promise.resolve([]),
+      ),
     );
     failingForUnknownReasonsHolderController = buildHolderController(
-      new HolderServiceMock(holderRepository, new CountryFactory(), () => {
-        throw new Error('Unknown error');
-      }),
+      new HolderServiceMock(
+        holderRepository,
+        new CountryFactory(),
+        promiseThatThrows,
+        promiseThatThrows,
+      ),
     );
     end = sinon.spy();
     json = sinon.spy();
@@ -77,53 +96,66 @@ describe('HolderController', () => {
     resMock = { status };
   });
 
-  it('Should receive name and taxpayerRegistry and country code and delegate to application layer', async () => {
-    await holderController.post(req, resMock);
-    expect(createHolder).to.have.been.calledWith(
-      holderName,
-      holderTaxpayerRegistry,
-      holderCountryCode,
-    );
-  });
+  describe('GET', () => {
+    it('Should return holder list', async () => {
+      const holderList = await holderController.get();
+      expect(expectedHolders).to.be.equal(holderList);
+    });
 
-  it('Should return status code 201', async () => {
-    await holderController.post(req, resMock);
-    expect(status).to.have.been.calledWith(201);
-    expect(end).to.have.been.called;
+    it('Should return 500 when promise eventually throws', () => {
+      expect(failingForUnknownReasonsHolderController.get(req, resMock)).to.not.eventually.throw;
+      expect(status).to.have.been.calledWith(500);
+    });
   });
+  describe('POST', () => {
+    it('Should receive name and taxpayerRegistry and country code and delegate to application layer', async () => {
+      await holderController.post(req, resMock);
+      expect(createHolder).to.have.been.calledWith(
+        holderName,
+        holderTaxpayerRegistry,
+        holderCountryCode,
+      );
+    });
 
-  it('Should return status code 400 if name is not present', async () => {
-    await holderController.post(reqWithoutName, resMock);
-    expect(status).to.have.been.calledWith(400);
-    expect(json).to.have.been.calledWith({ error: 'Parameters missing' });
-  });
+    it('Should return status code 201', async () => {
+      await holderController.post(req, resMock);
+      expect(status).to.have.been.calledWith(201);
+      expect(end).to.have.been.called;
+    });
 
-  it('Should return status code 400 if taxpayerregistry is not present', async () => {
-    await holderController.post(reqWithoutTaxpayerRegistry, resMock);
-    expect(status).to.have.been.calledWith(400);
-    expect(json).to.have.been.calledWith({ error: 'Parameters missing' });
-  });
+    it('Should return status code 400 if name is not present', async () => {
+      await holderController.post(reqWithoutName, resMock);
+      expect(status).to.have.been.calledWith(400);
+      expect(json).to.have.been.calledWith({ error: 'Parameters missing' });
+    });
 
-  it('Should return status code 400 if countryCode is not present', async () => {
-    await holderController.post(reqWithoutCountryCode, resMock);
-    expect(status).to.have.been.calledWith(400);
-    expect(json).to.have.been.calledWith({ error: 'Parameters missing' });
-  });
+    it('Should return status code 400 if taxpayerregistry is not present', async () => {
+      await holderController.post(reqWithoutTaxpayerRegistry, resMock);
+      expect(status).to.have.been.calledWith(400);
+      expect(json).to.have.been.calledWith({ error: 'Parameters missing' });
+    });
 
-  it('Should return status code 400 if error thrown', async () => {
-    await failingHolderController.post(req, resMock);
-    expect(status).to.have.been.calledWith(400);
-    expect(json).to.have.been.calledWith({ error: 'Service error' });
-  });
+    it('Should return status code 400 if countryCode is not present', async () => {
+      await holderController.post(reqWithoutCountryCode, resMock);
+      expect(status).to.have.been.calledWith(400);
+      expect(json).to.have.been.calledWith({ error: 'Parameters missing' });
+    });
 
-  it('Should return status code 400 if body is empty', async () => {
-    await holderController.post({}, resMock);
-    expect(status).to.have.been.calledWith(400);
-    expect(json).to.have.been.calledWith({ error: 'Parameters missing' });
-  });
+    it('Should return status code 400 if error thrown', async () => {
+      await failingHolderController.post(req, resMock);
+      expect(status).to.have.been.calledWith(400);
+      expect(json).to.have.been.calledWith({ error: 'Service error' });
+    });
 
-  it('Shoud return status 500 if exception is unknow', () => {
-    expect(failingForUnknownReasonsHolderController.post(req, resMock)).to.not.eventually.throw;
-    expect(status).to.have.been.calledWith(500);
+    it('Should return status code 400 if body is empty', async () => {
+      await holderController.post({}, resMock);
+      expect(status).to.have.been.calledWith(400);
+      expect(json).to.have.been.calledWith({ error: 'Parameters missing' });
+    });
+
+    it('Shoud return status 500 if exception is unknow', () => {
+      expect(failingForUnknownReasonsHolderController.post(req, resMock)).to.not.eventually.throw;
+      expect(status).to.have.been.calledWith(500);
+    });
   });
 });
