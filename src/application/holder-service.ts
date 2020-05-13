@@ -1,7 +1,7 @@
-import Holder from '../domain/holder';
-import TaxpayerRegistry from '../domain/taxpayer-registry';
-import { HolderRepository } from '../domain/holder-repository';
-import { CountryCode, CountryFactory } from '../domain/country';
+import Holder from '../domain/holder/holder';
+import TaxpayerRegistry from '../domain/holder/taxpayer-registry';
+import { HolderRepository } from '../domain/holder/holder-repository';
+import { CountryCode, CountryFactory } from '../domain/holder/country';
 
 export interface HolderResource {
   id: number;

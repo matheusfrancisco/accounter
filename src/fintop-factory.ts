@@ -1,10 +1,10 @@
 import { MemoryHolderRepository } from './infrastructure/memory-holder-repository';
 import { PostgresHolderRepository } from './infrastructure/postgres-holder-repository';
 import HolderService from './application/holder-service';
-import { CountryFactory } from './domain/country';
+import { CountryFactory } from './domain/holder/country';
 import { buildHolderController } from './view/holder-controller';
 import { Connection, createConnection } from 'typeorm';
-import { HolderRepository } from './domain/holder-repository';
+import { HolderRepository } from './domain/holder/holder-repository';
 
 export class FintopFactory {
   private static connection: Connection;

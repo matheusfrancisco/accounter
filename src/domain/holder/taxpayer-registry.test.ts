@@ -1,7 +1,7 @@
 import TaxpayerRegistry from './taxpayer-registry';
 import { countries } from './country';
 
-import { ServiceError } from '../service-error';
+import { ServiceError } from '../../service-error';
 
 describe('TaxpayerRegistry', () => {
   it('should hold Taxpayer Registry value', () => {

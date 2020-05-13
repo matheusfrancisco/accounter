@@ -1,4 +1,4 @@
-import { ServiceError } from '../service-error';
+import { ServiceError } from '../../service-error';
 export type CountryCode = 'US' | 'BR';
 
 export interface Country {

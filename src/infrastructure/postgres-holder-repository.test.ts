@@ -1,7 +1,7 @@
-import { HolderRepository } from '../../src/domain/holder-repository';
-import Holder from '../../src/domain/holder';
-import TaxpayerRegistry from '../../src/domain/taxpayer-registry';
-import { countries } from '../../src/domain/country';
+import { HolderRepository } from '../domain/holder/holder-repository';
+import Holder from '../domain/holder/holder';
+import TaxpayerRegistry from '../domain/holder/taxpayer-registry';
+import { countries } from '../domain/holder/country';
 import { getRepository, createConnection, Repository } from 'typeorm';
 import { HolderEntity } from '../../src/infrastructure/entity/holder-entity';
 import { PostgresHolderRepository } from '../../src/infrastructure/postgres-holder-repository';

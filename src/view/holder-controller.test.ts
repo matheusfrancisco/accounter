@@ -9,9 +9,9 @@ const expect = chai.expect;
 import { ServiceError } from '../service-error';
 import { buildHolderController } from './holder-controller';
 import HolderService from '../application/holder-service';
-import { CountryFactory } from '../domain/country';
+import { CountryFactory } from '../domain/holder/country';
 import { HolderResource } from '../application/holder-service';
-import { HolderRepository } from '../domain/holder-repository';
+import { HolderRepository } from '../domain/holder/holder-repository';
 
 describe('HolderController', () => {
   let createHolder: sinon.SinonSpy;

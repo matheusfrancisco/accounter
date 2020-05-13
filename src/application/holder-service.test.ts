@@ -1,7 +1,7 @@
 import sinon from 'sinon';
 import HolderService from './holder-service';
-import Holder from '../domain/holder';
-import { countries } from '../domain/country';
+import Holder from '../domain/holder/holder';
+import { countries } from '../domain/holder/country';
 
 describe('HolderService', () => {
   it('should save Holder with HolderRespository', () => {

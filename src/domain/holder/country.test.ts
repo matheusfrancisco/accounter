@@ -1,5 +1,5 @@
 import { countries, CountryFactory, CountryCode } from './country';
-import { ServiceError } from '../service-error';
+import { ServiceError } from '../../service-error';
 
 describe('Country', () => {
   describe('Brazil', () => {

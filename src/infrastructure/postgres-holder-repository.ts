@@ -1,7 +1,7 @@
-import { HolderRepository } from 'src/domain/holder-repository';
+import { HolderRepository } from 'src/domain/holder/holder-repository';
 import { HolderEntity } from '../../src/infrastructure/entity/holder-entity';
 import { Connection, getRepository } from 'typeorm';
-import Holder from 'src/domain/holder';
+import Holder from 'src/domain/holder/holder';
 
 export class PostgresHolderRepository implements HolderRepository {
   constructor(private connection: Connection) {}

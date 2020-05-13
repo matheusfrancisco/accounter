@@ -1,4 +1,4 @@
-import { HolderRepository } from './domain/holder-repository';
+import { HolderRepository } from './domain/holder/holder-repository';
 import { FintopFactory } from './fintop-factory';
 import { MemoryHolderRepository } from './infrastructure/memory-holder-repository';
 import { PostgresHolderRepository } from './infrastructure/postgres-holder-repository';
