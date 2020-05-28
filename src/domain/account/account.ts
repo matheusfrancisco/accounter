@@ -10,6 +10,7 @@ export const errorMessages = {
 
 export default class Account {
   readonly holders: Holder[];
+  public transactions: number[] = [];
 
   constructor(holders: Holder[]) {
     if (!holders.length) throw new ServiceError(errorMessages.zeroHolders);
@@ -18,6 +19,8 @@ export default class Account {
     this.holders = holders;
   }
 
-  // TODO: Alterar construtor para receber os holders
-  // TODO: Remover addHolder
+  public transfer(account: Account, amount: number) {
+    this.transactions.push(amount);
+    account.transactions.push(amount);
+  }
 }

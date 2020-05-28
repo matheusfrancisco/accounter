@@ -36,4 +36,27 @@ describe('Account', () => {
       );
     });
   });
+  describe('transactions', () => {
+    it('should return empty list when no transactions have been commited', () => {
+      const taxpayerRegistry = new TaxpayerRegistry('13464210642', countries.BR);
+      const holder = new Holder('Matheus', taxpayerRegistry);
+      const account = new Account([holder]);
+
+      expect(account.transactions).toEqual([]);
+    });
+  });
+
+  describe('transfer', () => {
+    it('should create a transaction for both accounts', () => {
+      const taxpayerRegistry = new TaxpayerRegistry('13464210642', countries.BR);
+      const holder = new Holder('Matheus', taxpayerRegistry);
+      const firstAccount = new Account([holder]);
+      const secondAccount = new Account([holder]);
+
+      firstAccount.transfer(secondAccount, 1200.0);
+
+      expect(firstAccount.transactions.length).toBeGreaterThan(0);
+      expect(firstAccount.transactions).toEqual(secondAccount.transactions);
+    });
+  });
 });
