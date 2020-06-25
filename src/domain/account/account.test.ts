@@ -1,5 +1,6 @@
 import Holder from '../holder/holder';
 import Account, { errorMessages } from './account';
+import Transaction from './transaction';
 
 import TaxpayerRegistry from '../holder/taxpayer-registry';
 import { countries } from '../holder/country';
@@ -52,11 +53,30 @@ describe('Account', () => {
       const holder = new Holder('Matheus', taxpayerRegistry);
       const firstAccount = new Account([holder]);
       const secondAccount = new Account([holder]);
+      const amount = 1200.0;
 
-      firstAccount.transfer(secondAccount, 1200.0);
+      firstAccount.transfer(secondAccount, amount);
 
       expect(firstAccount.transactions.length).toBeGreaterThan(0);
       expect(firstAccount.transactions).toEqual(secondAccount.transactions);
+      expect((firstAccount.transactions[0] as any) instanceof Transaction).toBeTruthy();
+      expect(firstAccount.transactions[0].amount).toEqual(amount);
+      expect(firstAccount.transactions[0].creditAccount).toEqual(firstAccount);
+      expect(firstAccount.transactions[0].debitAccount).toEqual(secondAccount);
     });
+  });
+
+  describe('balance', () => {
+    it('it should be 0 if there are no transactions', () => {
+      const taxpayerRegistry = new TaxpayerRegistry('13464210642', countries.BR);
+      const holder = new Holder('Matheus', taxpayerRegistry);
+      const account = new Account([holder]);
+
+      expect(account.balance).toBe(0);
+    });
+  });
+
+  it('it should be 2 when have two transactions', () => {
+    // CRIAR 2 TRANSAÇÕES
   });
 });

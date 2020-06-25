@@ -1,5 +1,6 @@
 import Holder from '../holder/holder';
 import { ServiceError } from '../../service-error';
+import Transaction from './transaction';
 
 const MAX_HOLDER_COUNT = 5;
 
@@ -10,7 +11,7 @@ export const errorMessages = {
 
 export default class Account {
   readonly holders: Holder[];
-  public transactions: number[] = [];
+  public transactions: Transaction[] = [];
 
   constructor(holders: Holder[]) {
     if (!holders.length) throw new ServiceError(errorMessages.zeroHolders);
@@ -20,7 +21,12 @@ export default class Account {
   }
 
   public transfer(account: Account, amount: number) {
-    this.transactions.push(amount);
-    account.transactions.push(amount);
+    const transaction = new Transaction(this, account, amount);
+    this.transactions.push(transaction);
+    account.transactions.push(transaction);
+  }
+
+  public get balance(): number {
+    return 0;
   }
 }
