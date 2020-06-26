@@ -74,9 +74,20 @@ describe('Account', () => {
 
       expect(account.balance).toBe(0);
     });
-  });
 
-  it('it should be 2 when have two transactions', () => {
-    // CRIAR 2 TRANSAÇÕES
+    it('should be 10 when occurs a transfer', () => {
+      const taxpayerRegistry = new TaxpayerRegistry('13464210642', countries.BR);
+      const holder = new Holder('Matheus', taxpayerRegistry);
+      const account = new Account([holder]);
+
+      const taxpayerRegistry2 = new TaxpayerRegistry('13464210642', countries.BR);
+      const holder2 = new Holder('Rebeca', taxpayerRegistry);
+      const account2 = new Account([holder]);
+
+      account.transfer(account2, 10);
+
+      expect(account2.balance).toEqual(10);
+      expect(account.balance).toEqual(-10);
+    });
   });
 });

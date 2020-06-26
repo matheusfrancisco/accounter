@@ -27,6 +27,12 @@ export default class Account {
   }
 
   public get balance(): number {
-    return 0;
+    return this.transactions.reduce(
+      (balance, transaction) =>
+        transaction.creditAccount === this
+          ? balance - transaction.amount
+          : balance + transaction.amount,
+      0,
+    );
   }
 }
